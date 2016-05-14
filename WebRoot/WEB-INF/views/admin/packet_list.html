@@ -1,0 +1,104 @@
+<%layout("/admin/common/default.html",{'title' : '商品包管理'}){%>
+<script type="text/javascript" src="${base}/template/admin/js/list.js"></script>
+
+
+<body>
+<!--在这里编写你的代码-->
+<div class="admin-content">
+  <div class="am-cf am-padding" style="padding:1rem 1.6rem 1.6rem 1rem;margin:0px;"> <!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品管理</strong> / <small>商品包列表</small></div>
+  </div>
+  <form class="am-form" id="listForm" action="${base}/packet/list" method="post">
+   <div class="am-g">
+     <div class="am-u-sm-12 am-u-md-6" style="padding:0px 1.6rem 1.6rem 1rem;margin:0px;">
+       <div class="am-btn-toolbar">
+         <div class="am-btn-group am-btn-group-xs" >
+           <!--button type="button" class="am-btn am-btn-default" onclick="location.href='${base}/packet/add'"><span class="am-icon-plus"></span> 新增</button-->
+           <button type="button" id="deleteButton" disabled="disabled" class="am-btn am-btn-default" onclick="deleteAll('${base}/packet/delete')"><span class="am-icon-trash-o"></span> 删除</button>
+         </div>
+       </div>
+     </div>
+     <div class="am-u-sm-12 am-u-md-3">
+       <div class="am-form-group">
+         <select name="property" data-am-selected="{btnSize: 'sm'}">
+           <option value="name" <%if(property! == "name"){%>selected="selected"<%}%>>名称</option>
+         </select>
+       </div>
+     </div>
+     <div class="am-u-sm-12 am-u-md-3" >
+       <div class="am-input-group am-input-group-sm">
+         <input type="text" class="am-form-field" name="keyword" value="">
+         <span class="am-input-group-btn">
+           <button id="searchButton" class="am-btn am-btn-default" type="button">搜索</button>
+         </span>
+       </div>
+     </div>
+   </div>
+   <div class="am-g" >
+     <div class="am-u-sm-12" style="padding:0px 5px 0px 0px;margin:0px;"><!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+         <table class="am-table am-table-striped am-table-hover table-main" style="padding:0px;margin:0px;">
+           <thead>
+             <tr>
+               <th class="table-check"><input type="checkbox" id="allCheck"></th>
+               <th class="table-id">序号</th>
+               <th class="table-title">${c2("packet.name")}</th>
+                 <th class="table-title">${c2("packet.shelf_id")}</th>
+               <th>${c2("packet.img")}</th>
+               <th>${c2("packet.maxBuy")}</th>
+               <th>${c2("packet.disPercent")}</th>
+               <th>${c2("packet.disAmount")}</th>
+                 <th>${c2("packet.price")}</th>
+               <th class="table-date ">${c2("packet.modifyDate")}</th>
+               <th class="table-set">操作</th>
+             </tr>
+         </thead>
+         <tbody>
+         <%for(list in pager.list){%>
+         	 <tr>
+             <td><input type="checkbox" name="ids" value="${list.id}"></td>              
+             <td>${listLP.index}</td>              
+             <td>${list.name}</td>
+                 <td>
+                     <%for(typeList in shelfList){
+                     if (typeList.id == list.shelf_id!){%>
+                     ${typeList.name}<%}}%>
+                 </td>
+             <td><%if (list.img != null){%>
+                 <a href="${imgPath!}${list.img}" class="imagePreview" target="_blank">查看</a><%}else{%>暂无<%}%></td>
+             <td>${list.maxBuy}</td>
+             <td>${list.disPercent}</td>
+             <td>${list.disAmount}</td>
+                 <td>${list.price}</td>
+             <td>${list.modifyDate,dateFormat="yyyy-MM-dd HH:mm:ss"}</td>
+             <td>
+               <div class="am-btn-toolbar">
+                 <div class="am-btn-group am-btn-group-xs">                  	
+                   <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="location.href='${base}/packet/edit?id=${list.id}'"><span class="am-icon-pencil-square-o"></span>编辑</button>
+                   <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="deleteAll('${base}/packet/delete')"><span class="am-icon-trash-o"></span> 删除</button>
+                     <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="location.href='${base}/packet/lookProduct?id=${list.id}'"><span class="am-icon-pencil-square-o">查看</button>
+                 </div>
+               </div>
+             </td>
+           </tr>
+         <%}%> 
+       </tbody>
+       </table>
+         <div class="am-cf">
+  			<!-- 分页 -->
+  			<%if (pager.list.~size > 0){%>
+  				<div class="am-fr">
+  					<% include("/admin/pager.html"){}%>
+  				</div>
+  			<%}else{%>
+   			<div class="am-kai">
+			  <h3>没有找到任何记录!</h3>
+			</div>
+  			<%}%>
+	 </div>  
+     </div>
+   </div>
+  </form>
+</div>
+
+</body>
+<%}%>

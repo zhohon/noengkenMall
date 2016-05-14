@@ -1,0 +1,122 @@
+<%layout("/mall/common/default.html",{'title' : '微商城'}){%>
+<div class="page-group">
+    <div id="page-order" class="page">
+        <%include("/mall/order/head.html"){}%>
+        <%include("/mall/order/navigator.html"){}%>
+        <div class="content">
+            <div class="card">
+                <div class="card-content">
+                    <div class="list-block  media-list">
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-media"><i class="icon icon-form-name"></i></div>
+                                    <div class="item-inner">
+                                        <a href="${ctxPath}/weixin/receiver/index?receiverId=${receiver.id!}"
+                                           class="item-link external">
+                                            <%if(isEmpty(receiver)){%>
+                                            <div class="item-inner">
+                                                <div class="item-title-row">
+                                                    <div class="item-title">暂无收货人信息</div>
+                                                </div>
+                                            </div>
+                                            <%}else{%>
+                                            <div class="item-inner">
+                                                <div class="item-title-row">
+                                                    <div class="item-title">收货人:${receiver.name!}</div>
+                                                    <div class="item-after">手机:${receiver.mobile!}</div>
+                                                </div>
+                                                <div class="item-text">收货地址:<label>${area(receiver.areaPath)}-${receiver.address!}</label>
+                                                </div>
+                                            </div>
+                                            <%}%>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="list-block  media-list">
+                        <ul>
+                            <%for(item in orderItems!){%>
+                            <li>
+                                <div class="card-header">
+                                    <div class="facebook-avatar"><img src="${imgPath+item.brand.logo!}" width="34"
+                                                                      height="34"></div>
+                                    <a class="item-media external"
+                                       href="${item.brand.url!}">${item.brand.name!}</a>
+                                </div>
+                                <div class="card-content">
+                                    <a href="/dextrys/weixin/packet/detail?id=${item.packet.id!}" class="external">
+                                        <div class="item-media">
+                                            <img src="${imgPath+item.img!}" width="50" height="50">
+                                        </div>
+                                    </a>
+                                    <%for(product in item.products!){%>
+                                    <div class="item-inner">
+                                        <div class="item-text">${product.name!}</div>
+                                        <div class="item-title-row">
+                                            <div class="item-subtitle">市场价：${product.price!,priceCurrencyFormat}</div>
+                                            <div class="item-subtitle">
+                                                促销价：${product.promotionPrice!,priceCurrencyFormat}
+                                            </div>
+                                            <div class="item-after">x${item.quantity!}</div>
+                                        </div>
+                                    </div>
+                                    <%}%>
+                                </div>
+                            </li>
+                            <%}%>
+                            <div class="card-footer">
+                                <div class="item-title"></div>
+                                <div class="item-after">共${orderItems.~size!}件，合计：${totalPrice!,priceCurrencyFormat}
+                                    <label id="productsPrice" style="visibility:hidden">${totalPrice}</label>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="list-block  media-list">
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title label">商品总重</div>
+                                            <div class="item-after">${productWeight}${productWeightUnit}</div>
+                                        </div>
+                                        <div class="item-title-row">
+                                            <div class="item-title label">选择配运方式</div>
+                                            <div class="item-after item-input">
+                                                <select id="deliveryType">
+                                                    <%for(deliveryType in allDeliveryType!){%>
+                                                    <option id="${deliveryType.id}" value="${deliveryType.deliveryFee}">
+                                                        ${deliveryType.name}${deliveryType.deliveryFee!,priceCurrencyFormat}
+                                                    </option>
+                                                    <%}%>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <%include("/mall/common/profile.html"){}%>
+    <!--手机端script需要加载后方-->
+    <%include("/mall/common/script.html"){}%>
+    <script type="text/javascript" src="${ctxPath}/js/sui/order.js"></script>
+</div>
+<%}%>

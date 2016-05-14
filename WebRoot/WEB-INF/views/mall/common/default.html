@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> ${systemConfig.systemName}</title>
+    <%include("/mall/common/meta.html"){}%>
+    <%include("/mall/common/include.html"){}%>
+    <script type="text/javascript">
+    function getCtxPath() {
+        return "${ctxPath}";
+    }
+    function getImgPath() {
+        return "${imgPath}";
+    }
+
+    </script>
+</head>
+<body>
+${layoutContent}
+</body>
+</html>

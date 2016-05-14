@@ -1,0 +1,23 @@
+<%layout("/mall/common/default.html",{'title' : '微商城'}){%>
+<div id="page-cart" class="page ${(cartItemCount!0)==0?'':'page-current'}">
+    <%include("/mall/cart/head.html"){}%>
+    <%if((cartItemCount!0)!=0){include("/mall/cart/navigator.html"){}}%>
+    <div class="content">
+        <div class="infinite-scroll native-scroll" data-distance="100">
+            <div class="list-block media-list">
+                <ul class="list-container">
+                </ul>
+            </div>
+            <!-- 加载提示符 -->
+            <div class="infinite-scroll-preloader">
+                <div class="preloader">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%include("/mall/cart/empty.html"){}%>
+<!--手机端script需要加载后方-->
+<%include("/mall/common/script.html"){}%>
+<script type="text/javascript" src="${ctxPath}/js/sui/cart.js"></script>
+<%}%>

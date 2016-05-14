@@ -1,0 +1,274 @@
+<%layout("/admin/common/default.html",{'title' : '添加活动'}){%>
+<!-- We support more than 40 localizations -->
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/grid.locale-en.min.js"></script>
+<!-- This is the Javascript file of jqGrid -->
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/jquery.jqGrid.min.js"></script>
+<!-- A link to a Boostrap  and jqGrid Bootstrap CSS siles-->
+<link rel="stylesheet" href="${base}/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="${base}/css/jqgrid/ui.jqgrid-bootstrap.css" />
+<script>
+        $.jgrid.defaults.width = 800;
+        $.jgrid.defaults.responsive = true;
+        $.jgrid.defaults.styleUI = 'Bootstrap';
+</script>
+<script src="${base}/js/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/bootstrap-datetimepicker.js"></script>
+<script type="text/ecmascript" src="${base}/js/plugin/typeahead/typeahead.min.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="${base}/css/jqgrid/bootstrap-datetimepicker.css"/>
+<script type="text/javascript">
+        if("${success!}" != ""){
+            alert("提交成功");
+        }
+
+</script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/lang/zh-cn/zh-cn.js"></script>
+<body>
+<form id="listForm" action="${base}/packet/addSinglePackage" enctype="multipart/form-data" method="post"
+      onsubmit="return toValid()">
+    <div id="tabdiv1" style="display:block">
+        <table id="jqGrid" width="100%"></table>
+        <div id="jqGridPager"></div>
+        <div id="myselectrows"></div>
+        <input class="btn btn-default" type="button" value="得到选中数据" onclick="getSelectedRows()"/>
+        <input class="btn btn-default" type="button" value="下一步" onclick="nextPacket(1)"/>
+    </div>
+    <div id="tabdiv2" style="display:none">
+        <table id="table2">
+            <tr>
+                <td width="80px">类型:</td>
+                <td><input type="radio" name="packagetype" id="singleproductpackage" value="1" checked/>每个商品单独打包 <input
+                        type="radio" name="packagetype" id="mutiproductpackage" value="2"/>多个商品打一个包
+                </td>
+            </tr>
+
+            <tr>
+                <td>${c2("packet.name")}:</td>
+                <td><input type="text" name="packet.name" id="packetName" value="${packet.name!}"/></td>
+            </tr>
+            <tr>
+                <td>${c2("packet.shelf_id")}:</td>
+                <td>
+                    <select name="packet.shelf_id" class="{required: true}">
+                        <option value="">请选择...</option>
+                        <%for(list in shelfList){%>
+                        <option value="${list.id}"
+                        <%if (list.id == packet.shelf_id!){%> selected<%}%>>
+                        ${list.name}
+                        </option>
+                        <%}%>
+                    </select></td>
+            </tr>
+            <tr>
+                <td>${c2("packet.img")}:</td>
+                <td><input id="img" type="file" name="img"/></td>
+            </tr>
+            <tr>
+                <td>${c2("packet.productCategory_id")}:</td>
+                <td><select name="packet.productCategory_id" class="{required: true}" id="productCategoryid">
+                    <option value="">请选择...</option>
+                    <%for(list in productCategoryTreeList){%>
+                    <option value="${list.id}"
+                    <%if (list.id == packet.productCategory_id!){%> selected<%}%>>
+                    <%if (list.level != 0){%>
+                    <%for( i in range(0,list.level)){%>------<%}%>
+                    <%}%>
+                    ${list.name}
+                    </option>
+                    <%}%>
+                </select></td>
+            </tr>
+            <!--tr><td>最大数量:<input type="text" name="packet.maxBuy"  value="${packet.maxBuy!}" title="只允许输入正整数" required/></td></tr-->
+            <tr>
+                <td>${c2("packet.disPercent")}:</td>
+                <td><input type="text" name="packet.disPercent" value="${packet.disPercent!'0'}" title="只允许输入零或正整数"/>
+                </td>
+            </tr>
+            <tr>
+                <td>${c2("packet.disAmount")}:</td>
+                <td><input type="text" name="packet.disAmount" value="${packet.disAmount!'0'}" title="只允许输入数字"/></td>
+            </tr>
+            <tr>
+                <td>${c2("packet.seq")}:</td>
+                <td><input type="text" name="packet.seq" class="am-input-sm" value="${packet.seq!}" title="只允许输入零或正整数"/>
+                </td>
+            </tr>
+            <tr>
+                <td>${c2("packet.imageText")}:</td>
+                <td>
+                    <script id="editor" name="packet.imageText" type="text/plain" style="width:350px;height:240px;">
+                        ${packet.imageText!}
+                    </script>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" value="上一步" onclick="nextPacket(2)"/>
+                    <button type="submit">提交保存</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#jqGrid").jqGrid({
+            url: '${base}/packet/getProduct',
+            mtype: "POST",
+            datatype: "json",
+            autowidth : true,
+            height : 'auto',
+            colModel: [
+                {label : '${c2("product.productSn")}', name: 'productSn', width: 100},
+                {label : '${c2("product.name")}', name: 'name', width: 350},
+                {label : '${c2("product.price")}', sorttype: 'number',name: 'price', width: 50},
+                {label : '${c2("product.isBest")}', name: 'isBest',  width: 50},
+                {label : '${c2("product.isNew")}',name: 'isNew', width: 50},
+                {label : '${c2("product.isHot")}', name: 'isHot', width: 50},
+                {label : '${c2("product.store")}', sorttype: 'integer', name: 'store', width: 50},
+                {label : '${c2("product.modifyDate")}', sorttype: 'date', name: 'modifyDate', width: 100,
+                    searchoptions: {
+                        // dataInit is the client-side event that fires upon initializing the toolbar search field for a column
+                        // use it to place a third party control to customize the toolbar
+                        dataInit: function (element) {
+                            $(element).datetimepicker({
+                                autoclose: true,
+                                format: 'yyyy-mm-dd',
+                                orientation : 'bottom'
+                            });
+                        }
+                    }
+                },
+            ],
+            rowNum: 10,
+            viewrecords: true,
+            rownumbers: true,
+            multiselect : true,
+            pager: "#jqGridPager",
+            caption: "商品信息",
+            gridComplete: $.admin.resizeFrame
+        });
+        // activate the build in navigator
+        $('#jqGrid').navGrid("#jqGridPager", {
+            search: true, // show search button on the toolbar
+            add: false,
+            edit: false,
+            del: false,
+            refresh: true
+        });
+    });
+    $(window).on('resize.jqGrid', function () {
+        $("#jqgrid").jqGrid('setGridWidth', $("#content").width());
+    })
+
+    </script>
+    <script type="text/javascript">
+    var myArray=new Array();
+    var testArray = false;
+    function getSelectedRows() {
+        var grid = $("#jqGrid");
+        var rowKey = grid.getGridParam("selrow");
+
+        if (!rowKey)
+            alert("No rows are selected");
+        else {
+            var selectedIDs = grid.getGridParam("selarrrow");
+            for (var i = 0; i < selectedIDs.length; i++) {
+                for (var j = 0; j < myArray.length; j++) {
+                    if(myArray[j] == selectedIDs[i]){
+                        testArray = true;
+                        break;
+                    }
+                }
+                if(!testArray){
+                    var rowData = $("#jqGrid").jqGrid('getRowData',selectedIDs[i]);
+                    if(myArray.length==0){
+                        $("#myselectrows").append("<table id='table1'><tr><td><input type='checkbox' name='products' value='"+selectedIDs[i]+"' checked>"+rowData.name+"</input></td></tr></table>");
+                    }
+                    if(myArray.length!=0 && myArray.length % 2 == 0){
+                        var newRow = "<tr><td><input type='checkbox' name='products' value='"+selectedIDs[i]+"' checked>"+rowData.name+"</input></td></tr>";
+
+                        $("#table1 tr:last").after(newRow);
+                    }
+                    else if(myArray.length % 2 == 1){
+                        var newRow = "<td><input type='checkbox' name='products' value='"+selectedIDs[i]+"' checked>"+rowData.name+"</input></td>";
+                        $("#table1 tr:last").each(function(){
+                            $(this).append(newRow);
+                        });
+                    }
+                    myArray.push(selectedIDs[i]);
+                    testArray = false;
+                }
+                else{
+                    testArray = false;
+                }
+            }
+        }
+    }
+
+    </script>
+    <script type="text/javascript">
+    $("#packetName").hide();
+    $("#img").hide();
+    $("#editor").hide();
+    $("#productCategoryid").hide();
+    $(document).ready(function(){
+        $("#singleproductpackage").click(function(){
+            $("#listForm").action='${base}/packet/addSinglePackage';
+            $("#packetName").hide();
+            $("#img").hide();
+            $("#editor").hide();
+            $("#productCategoryid").hide();
+        });
+        $("#mutiproductpackage").click(function(){
+            $("#listForm").action='${base}/packet/addMultiPackage';
+            $("#packetName").show();
+            $("#img").show();
+            $("#editor").show();
+            $("#productCategoryid").show();
+        });
+    });
+
+    </script>
+    <script type="text/javascript">
+    var ue = UE.getEditor('editor');//初始化
+    function toValid(){
+        if($("input[name='products']").length == 0){
+            alert("请选择商品");
+            return false;
+        }
+        var dialCheckResult=$("input:radio[name='packagetype']:checked").val() ;
+        if(dialCheckResult == 2){
+            if($("#packetName").val() == ""){
+                alert("请填写名称");
+                return false;
+            }
+            if($("#img").val() == ""){
+                alert("请上传图片");
+                return false;
+            }
+            if(!UE.getEditor('editor').hasContents())
+            {
+                alert("请输入图文内容");
+                return false;
+            }
+        }
+    }
+    function nextPacket(stepNext) {
+        if (stepNext == 1) {
+            $("#tabdiv1").hide();
+            $("#tabdiv2").show();
+        }
+        if (stepNext == 2) {
+            $("#tabdiv1").show();
+            $("#tabdiv2").hide();
+        }
+    }
+
+    </script>
+</form>
+</body>
+<%}%>

@@ -1,0 +1,32 @@
+<!-- 工具栏 -->
+<!-- 顶层 显示-->
+<nav class="bar bar-tab theme-dark" style="z-index:9999">
+    <a id="nav-page-index" class="tab-item external" href='${ctxPath}/weixin/mall#page-index' data-no-cache="true">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">首页</span>
+    </a>
+    <label class="tab-item label-checkbox item-content">
+        <input type="checkbox" name="checkAll">
+
+        <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+        <span class="tab-label">全选</span>
+    </label>
+
+    <a class="tab-item">
+        <div class="row">
+            <span class="tab-label">合计：<label id="totalPrice"></label></span>
+        </div>
+        <div>
+            <div class="row color-warning sub" style="font-size: .8rem;">不含运费</div>
+        </div>
+    </a>
+    <a id="nav-page-delete" class="tab-item" href="#">
+        <span class="icon icon-remove"></span>
+        <span class="tab-label">删除</span>
+    </a>
+    <!--不用缓存，生成新请求-->
+    <a id="nav-page-order" class="tab-item" href="#" data-no-cache="true">
+        <span class="icon icon-gift"></span>
+        <span class="tab-label">结算<label id="checkedCount"></label></span>
+    </a>
+</nav>

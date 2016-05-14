@@ -1,0 +1,19 @@
+<!-- 工具栏 -->
+<!-- 顶层 显示-->
+<nav class="bar bar-tab theme-dark" style="z-index:9999">
+    <a id="nav-page-index" class="tab-item external" href='${ctxPath}/weixin/mall#page-index' data-no-cache="true">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">首页</span>
+    </a>
+    <a class="tab-item">
+        <div class="row">
+            <span class="tab-label">运费<label id="deliveryFee">${allDeliveryType[0].deliveryFee}</label></span>
+        </div>
+        <div>
+            <div class="row color-warning sub" style="font-size: .8rem;">合计：<label id="totalPrice">${totalPrice+allDeliveryType[0].deliveryFee,priceCurrencyFormat}</label></div>
+        </div>
+    </a>
+        <div class="submit cancel tab-item">取消订单</div>
+    <!--不用缓存，生成新请求-->
+        <div class="submit confirm tab-item">提交订单</div>
+</nav>

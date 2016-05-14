@@ -1,0 +1,100 @@
+<%layout("/mall/common/default.html",{'title' : '微商城'}){%>
+<div class="page-group">
+    <div id="page-receiver-input" class="page">
+        <%include("/mall/receiver-input/head.html"){}%>
+        <%include("/mall/receiver-input/navigator.html"){}%>
+        <div class="content">
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-city"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">省市区</div>
+                                <div class="item-input">
+                                    <input name="receiver.areaPath" type="text" id="city-picker" placeholder="请选择省市区" value="${area(receiver.areaPath!)}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-name"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">地址</div>
+                                <div class="item-input">
+                                    <input name="receiver.address" type="text" placeholder="请输入收货人地址" value="${receiver.address!}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-name"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">姓名</div>
+                                <div class="item-input">
+                                    <input name="receiver.name" type="text" placeholder="请输入收货人姓名" value="${receiver.name!}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">手机</div>
+                                <div class="item-input">
+                                    <input name="receiver.mobile" type="text" placeholder="请输入收货人联系手机" value="${receiver.mobile!}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">电话</div>
+                                <div class="item-input">
+                                    <input name="receiver.phone" type="text" placeholder="请输入收货人固定电话" value="${receiver.phone!}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-name"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title label">邮编</div>
+                                <div class="item-input">
+                                    <input name="receiver.zipCode" type="text" placeholder="请输入收货人邮编" value="${receiver.zipCode!}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-toggle"></i></div>
+                            <div class="item-inner">
+                                    <div class="item-title label">默认地址</div>
+                                    <div class="item-input">
+                                        <label class="label-switch">
+                                            <input id="checkIsDefault" name="receiver.isDefault" type="checkbox" value="${receiver.isDefault!false}" <%if(!isEmpty(receiver)&&receiver.isDefault){print("checked='checked'");}%> />
+                                            <div class="checkbox"></div>
+                                            <input name="receiver.id" type="hidden" value="${receiver.id!}"/>
+                                        </label>
+                                    </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <%include("/mall/common/profile.html"){}%>
+    <!--手机端script需要加载后方-->
+    <%include("/mall/common/script.html"){}%>
+    <script type="text/javascript" src="//g.alicdn.com/msui/sm/0.6.2/js/sm-city-picker.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${ctxPath}/js/sui/receiver-input.js"></script>
+</div>
+<%}%>

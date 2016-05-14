@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <title>${title!} - Powered By ${systemConfig.systemName}</title>
+    <%include("/admin/common/meta.html"){}%>
+    <%include("/admin/common/include.html"){}%>
+    <script type="text/javascript">
+    function getCtxPath() {
+        return '${ctxPath}';
+    }
+    function getImgPath() {
+        return "${imgPath}";
+    }
+    </script>
+</head>
+${layoutContent}
+</html>

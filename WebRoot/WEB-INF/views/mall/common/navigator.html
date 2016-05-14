@@ -1,0 +1,22 @@
+<!-- 工具栏 -->
+<!-- 顶层 显示-->
+<nav class="bar bar-tab theme-dark" style="z-index:9999">
+    <a id="nav-page-index" class="tab-item" href='<%if(true==direct!){print(ctxPath);%>/weixin/mall<%}%>#page-index' <%if(true==direct!){print("external");}%>>
+        <span class="icon icon-home"></span>
+        <span class="tab-label">首页</span>
+    </a>
+    <a id="nav-page-star" class="tab-item" href="<%if(true==direct!){print(ctxPath);%>/weixin/mall<%}%>#page-star" <%if(true==direct!){print("external");}%>>
+        <span class="icon icon-star"></span>
+        <span class="tab-label">收藏</span>
+    </a>
+    <!--不用缓存，生成新请求-->
+    <a id="nav-page-cart" class="tab-item external" href="${ctxPath}/weixin/cart/index" data-no-cache="true" >
+        <span class="icon icon-cart"><label>${(cartItemCount!0)==0?"":"("+cartItemCount!+")"}</label></span>
+        <span class="tab-label" id="cartCount">购物车</span>
+    </a>
+    <!--不用缓存，生成新请求-->
+    <a id="nav-page-setting" class="tab-item" href="<%if(true==direct!){print(ctxPath);%>/weixin/mall<%}%>#page-setting" data-no-cache="true" <%if(true==direct!){print("external");}%>>
+        <span class="icon icon-settings"></span>
+        <span class="tab-label">设置</span>
+    </a>
+</nav>

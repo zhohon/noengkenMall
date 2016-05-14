@@ -1,0 +1,95 @@
+<%layout("/admin/common/default.html",{'title' : '查看货架'}){%>
+    <script type="text/javascript" src="${base}/template/admin/js/list.js"></script>
+
+<body>
+<!--在这里编写你的代码-->
+<div class="admin-content">
+  <div class="am-cf am-padding" style="padding:1rem 1.6rem 1.6rem 1rem;margin:0px;"> <!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品管理</strong> / <small>货架列表</small></div>
+  </div>
+  <form class="am-form" id="listForm" action="${base}/shelf/list" method="post">
+   <!--div class="am-g">
+     <div class="am-u-sm-12 am-u-md-6" style="padding:0px 1.6rem 1.6rem 1rem;margin:0px;">
+       <div class="am-btn-toolbar">
+         <div class="am-btn-group am-btn-group-xs" >
+         </div>
+       </div>
+     </div>
+     <div class="am-u-sm-12 am-u-md-3">
+       <div class="am-form-group">
+         <select name="property" data-am-selected="{btnSize: 'sm'}">
+           <option value="name" <%if(property! == "name"){%>selected="selected"<%}%>>名称</option>
+         </select>
+       </div>
+     </div>
+     <div class="am-u-sm-12 am-u-md-3" >
+       <div class="am-input-group am-input-group-sm">
+         <input type="text" class="am-form-field" name="keyword" value="">
+         <span class="am-input-group-btn">
+           <button id="searchButton" class="am-btn am-btn-default" type="button">搜索</button>
+         </span>
+       </div>
+     </div>
+   </div-->
+   <div class="am-g" >
+     <div class="am-u-sm-12" style="padding:0px 5px 0px 0px;margin:0px;"><!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+         <table class="am-table am-table-striped am-table-hover table-main" style="padding:0px;margin:0px;">
+           <thead>
+             <tr>
+               <th class="table-check"><input type="checkbox" id="allCheck"></th>
+               <th class="table-id">序号</th>
+               <th class="table-title">货架名称</th>
+                 <th class="table-type">活动</th>
+               <th>图片</th>
+               <th>最大数量</th>
+               <th class="table-date ">修改日期</th>
+               <th class="table-set">操作</th>
+             </tr>
+         </thead>
+         <tbody>
+         <%for(list in pager.list){%>
+         	 <tr>
+             <td><input type="checkbox" name="ids" value="${list.id}"></td>              
+             <td>${listLP.index}</td>              
+             <td>${list.name}</td>
+                 <td>
+                     <%for(shelList in shelfActivityList){
+                     if (shelList.id == list.activity_id!){%>
+                     ${shelList.name}<%}}%>
+                 </td>
+             <td><%if (list.img != null){%><a href="${base}${list.img}" class="imagePreview" target="_blank">查看</a><%}else{%>暂无<%}%></td>
+             <td>${list.maxBuy}</td>
+             <td>${list.modifyDate,dateFormat="yyyy-MM-dd HH:mm:ss"}</td>
+             <td>
+               <div class="am-btn-toolbar">
+                 <div class="am-btn-group am-btn-group-xs">                  	
+                   <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="location.href='${base}/shelf/edit?id=${list.id}'"><span class="am-icon-pencil-square-o"></span>编辑</button>
+                   <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="deleteAll('${base}/shelf/delete')"><span class="am-icon-trash-o"></span> 删除</button>
+                     <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="location.href='${base}/shelf/toaddPacket?id=${list.id}'"><span class="am-icon-pencil-square-o">上架</button>
+                     <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="location.href='${base}/shelf/todeletePacket?id=${list.id}'"><span class="am-icon-pencil-square-o">下架</button>
+                 </div>
+               </div>
+             </td>
+           </tr>N
+         <%}%> 
+       </tbody>
+       </table>
+         <div class="am-cf">
+  			<!-- 分页 -->
+  			<%if (pager.list.~size > 0){%>
+  				<div class="am-fr">
+  					<% include("/admin/pager.html"){}%>
+  				</div>
+  			<%}else{%>
+   			<div class="am-kai">
+			  <h3>没有找到任何记录!</h3>
+			</div>
+  			<%}%>
+	 </div>  
+     </div>
+   </div>
+  </form>
+</div>
+
+</body>
+<%}%>

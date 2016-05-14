@@ -1,0 +1,54 @@
+<%layout("/mall/common/default.html",{'title' : '微商城'}){%>
+<div class="page-group">
+    <div id="page-receiver" class="page page-current">
+        <%include("/mall/receiver/head.html",{'title' : '管理收货地址'}){}%>
+        <%include("/mall/receiver/navigator.html"){}%>
+        <div class="content">
+            <div class="card">
+                <div class="card-content">
+                    <div class="list-block media-list">
+                        <ul>
+                            <li>
+                                <div class="item-content item-link">
+                                    <div class="item-inner">
+                                        <div class="item-title">请选择收货人</div>
+                                    </div>
+                                </div>
+                            </li>
+                            <%for(receiver in receiverList){%>
+                            <li>
+                                <label class="label-checkbox item-content <%if(receiver.isDefault){%>theme-dark<%}%>">
+                                    <div style="display: none;" class="receiver-box" id="${receiver.id}">
+                                        <input type="radio" name="my-radio">
+
+                                        <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                                    </div>
+                                    <div class="item-inner">
+                                        <a href="${ctxPath}/weixin/order/index?receiverId=${receiver.id}">
+                                            <div class="item-title-row">
+                                                <div class="item-title" style="color:#bbb">收货人:${receiver.name}</div>
+                                                <div class="item-after">手机:${receiver.mobile}</div>
+                                                <div class="item-media">
+                                                    <span class="icon <%if(!isEmpty(receiverId)&&receiverId==receiver.id){%>icon-check<%}%>"></span>
+                                                </div>
+                                            </div>
+                                            <div class="item-text" style="word-break : break-all;">收货地址:<label>${area(receiver.areaPath)}-${receiver.address!}</label>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </label>
+                            </li>
+                            <%}%>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%include("/mall/common/profile.html"){}%>
+    <!--手机端script需要加载后方-->
+    <%include("/mall/common/script.html"){}%>
+    <script type="text/javascript" src="//g.alicdn.com/msui/sm/0.6.2/js/sm-city-picker.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${ctxPath}/js/sui/receiver.js"></script>
+</div>
+<%}%>

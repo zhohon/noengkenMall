@@ -1,0 +1,20 @@
+<%layout("/mall/common/default.html",{'title' : '微商城'}){%>
+<body class="message">
+	<div class="body">
+		<div class="messageBox">
+			<div class="boxTop">
+				<div class="boxTitle">错误信息&nbsp;</div>
+				<a class="boxClose windowClose" href="#" hidefocus="true"></a>
+			</div>
+			<div class="boxMiddle">
+				<div class="messageContent">
+					<span class="icon error">&nbsp;</span>
+					<span class="messageText">${errorMessages}<br></span>
+				</div>
+				<input type="button" class="formButton messageButton" <%if (!isEmpty(redirectionUrl)){%>onclick="window.location.href='${redirectionUrl!}'"<%}else{%>onclick="window.history.back(); return false;"<%}%> value="确  定" hidefocus="true" />
+			</div>
+			<div class="boxBottom"></div>
+		</div>
+	</div>
+</body>
+<%}%>

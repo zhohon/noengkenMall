@@ -1,0 +1,123 @@
+<%
+var isAdd = false;
+var isEdit = false;
+if(isEmpty(activity.id)){
+isAdd = true;
+}else{
+isEdit = true;
+}%>
+<%layout("/admin/common/default.html",{'title' : '添加活动'}){%>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/bootstrap-datetimepicker.js"></script>
+<script type="text/ecmascript" src="${base}/js/plugin/typeahead/typeahead.min.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="${base}/css/jqgrid/bootstrap-datetimepicker.css"/>
+<script src="${base}/js/bootstrap/bootstrap.min.js"></script>
+<!-- We support more than 40 localizations -->
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/grid.locale-en.min.js"></script>
+<!-- This is the Javascript file of jqGrid -->
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/jquery.jqGrid.min.js"></script>
+<link rel="stylesheet" href="${base}/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="${base}/css/jqgrid/ui.jqgrid-bootstrap.css"/>
+<body class="input">
+<div class="body">
+    <div class="inputBar">
+        <h1><span class="icon">&nbsp;</span><%if(isAdd){%>添加活动<%}else{%>编辑活动<%}%></h1>
+    </div>
+    <div class="blank"></div>
+    <form id="inputForm" class="validate"
+          action="<%if (isAdd){%>${base}/activity/save<%}else{%>${base}/activity/update<%}%>"
+          enctype="multipart/form-data" method="post" onsubmit="return toValid()">
+        <input type="hidden" name="activity.id" value="${activity.id!}"/>
+        <table class="inputTable tabContent">
+            <tr>
+                <th>
+                    ${c2("activity.name")}:
+                </th>
+                <td>
+                    <input type="text" name="activity.name" class="formText {required: true}" value="${activity.name!}"
+                           required/>
+                    <label class="requireField">*</label>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    ${c2("activity.maxProNum")}:
+                </th>
+                <td>
+                    <input type="text" name="activity.maxProNum" class="formText {required: true, min: 1,digits: true}"
+                           value="${activity.maxProNum!}"/>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    ${c2("activity.buyLimit")}:
+                </th>
+                <td>
+                    <input type="text" name="activity.buyLimit" class="formText {min: 1,digits: true}"
+                           value="${activity.buyLimit!}"/>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    ${c2("activity.bannerUrl")}:
+                </th>
+                <td>
+                    <input type="file" name="img" <%if (isAdd){%>required<%}%>/><%if (isEdit){%><a
+                        href="${imgPath!}${activity.bannerUrl!}" class="am-input-sm" target="_blank">查看</a><%}%>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    ${c2("activity.startTime")}:
+                </th>
+                <td>
+                    <input type="text" name="startTime1" value="${activity.startTime!,dateFormat='yyyy-MM-dd HH:mm:ss'}"
+                           id="datetimepicker1" data-date-format="yyyy-mm-dd hh:ii"/>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    ${c2("activity.endTime")}:
+                </th>
+                <td>
+                    <input type="text" name="endTime1" value="${activity.endTime!,dateFormat='yyyy-MM-dd HH:mm:ss'}"
+                           id="datetimepicker2" data-date-format="yyyy-mm-dd hh:ii"/>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    ${c2("activity.imageText")}:
+                </th>
+                <td>
+                    <script id="editor" name="activity.imageText" type="text/plain" style="width:350px;height:240px;"
+                            required>${activity.imageText!}
+                    </script>
+                </td>
+            </tr>
+        </table>
+
+        <div class="buttonArea">
+            <input type="submit" class="formButton" value="确  定" hidefocus="true"/>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" class="formButton" onclick="window.history.back(); return false;" value="返  回"
+                   hidefocus="true"/>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+	var ue = UE.getEditor('editor');//初始化
+	$('#datetimepicker1').datetimepicker();
+	$('#datetimepicker2').datetimepicker();
+	function toValid(){
+		if(!UE.getEditor('editor').hasContents())
+		{
+			alert("请输入图文内容");
+			return false;
+		}
+	}
+</script>
+<%}%>

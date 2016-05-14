@@ -1,0 +1,92 @@
+<%layout("/admin/common/default.html",{'title' : '菜单管理'}){%>
+<%
+var isAdd = false;
+var isEdit = false;
+if(isEmpty(brand.id)){
+isAdd = true;
+}else{
+isEdit = true;
+}%>
+<body>
+<!--在这里编写你的代码-->
+<div class="admin-content">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品管理</strong> /
+            <small><%if(isAdd){%>添加品牌<%}else{%>编辑品牌<%}%></small>
+        </div>
+    </div>
+    <hr style="padding:0px 1.6rem 1.6rem 1rem;margin:0px;">
+    <div class="am-g">
+        <div class="am-u-sm-12" style="padding:0px 5px 0px 0px;margin:0px;">
+            <form id="inputForm" class="am-form"
+                  action="<%if(isAdd){%>${base}/brand/save<%}else{%>${base}/brand/update<%}%>"
+                  enctype="multipart/form-data" method="post">
+                <input type="hidden" name="brand.id" value="${brand.id!}"/>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("brand.name")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="brand.name" class="am-input-sm" value="${brand.name!}" required/>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning">${nameMessages!}</div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("brand.logo")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                        <input type="file" name="logo"/><%if (isEdit){%><a href="${imgPath!}${brand.logo!}"
+                                                                           class="am-input-sm" target="_blank">查看</a><%}%>
+                    </div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("brand.url")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="brand.url" class="am-input-sm" value='<%if(isEmpty(brand.url)){print("http://");}else{print(brand.url);}%>'
+                               title="必须以http://开头" required/>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning">${urlMessages!}</div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("brand.orderList")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="brand.orderList" class="am-input-sm" value="${brand.orderList!50}"
+                               title="只允许输入零或正整数" required/>
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-6 am-text-warning">${orderListMessages!}</div>
+                </div>
+
+                <div class="am-g am-margin-top-sm">
+                    <div class="am-u-sm-12 am-u-md-1 am-text-right admin-form-text">${c2("brand.introduction")}:</div>
+                    <div class="am-u-sm-12 am-u-md-11">
+                        <!-- <textarea name="brand.introduction" class="wysiwyg" rows="10" style="width: 65%">${brand.introduction!}</textarea> -->
+                        <script id="editor" name="brand.introduction" type="text/plain"
+                                style="width: 70%;height:240px;">${brand.introduction!}
+                        </script>
+                    </div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-12 am-u-md-1 am-text-right admin-form-text"></div>
+                    <div class="am-u-sm-12 am-u-md-11">
+                        <button type="submit" class="am-btn am-btn-primary am-btn-xs">提交保存</button>
+                        <button type="button" class="am-btn am-btn-warning am-btn-xs"
+                                onclick="window.history.back(); return false;">放弃保存
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 百度编辑器 -->
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+	var ue = UE.getEditor('editor');//初始化
+</script>
+<!-- content end -->
+</body>
+<%}%>

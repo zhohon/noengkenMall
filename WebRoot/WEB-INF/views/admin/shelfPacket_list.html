@@ -1,0 +1,121 @@
+<%layout("/admin/common/default.html",{'title' : '商品包管理'}){%>
+<script type="text/javascript" src="${base}/template/admin/js/list.js"></script>
+<script type="text/javascript">
+function addPacket(url) {
+var $idsCheckedCheck = $("[name='ids']:checked");
+var $deleteButton = $("#deleteButton");
+if (confirm('您确定吗？') == true) {
+$.ajax({
+url: url,
+data: $idsCheckedCheck.serialize()+"&shelfid="+$("#shelfid").val(),
+dataType: "json",
+async: false,
+beforeSend: function(data) {
+$deleteButton.prop("disabled", true)
+},
+success: function(data) {
+$deleteButton.prop("disabled", false)
+if (data.status == "success") {
+$idsCheckedCheck.parent().parent().remove();
+}
+alert(data.message);
+//$.message(data.status, data.message);
+}
+});
+}
+}
+</script>
+<%
+    var isAdd = false;
+    var isDelete = false;
+    if(addPacket==0){
+        isAdd = true;
+    }else{
+        isDelete = true;
+    }%>
+<body>
+<!--在这里编写你的代码-->
+<div class="admin-content">
+  <div class="am-cf am-padding" style="padding:1rem 1.6rem 1.6rem 1rem;margin:0px;"> <!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品管理</strong> / <small><%if(isAdd){%>上架<%}else{%>下架<%}%></small></div>
+  </div>
+
+  <form class="am-form" id="listForm" action="<%if(isAdd){%>${base}/shelf/toaddPacket<%}else{%>${base}/shelf/todeletePacket<%}%>" method="post">
+      <input type="hidden" name="shelfid" id="shelfid" value="${shelfid}">
+   <div class="am-g">
+     <div class="am-u-sm-12 am-u-md-6" style="padding:0px 1.6rem 1.6rem 1rem;margin:0px;">
+       <div class="am-btn-toolbar">
+         <div class="am-btn-group am-btn-group-xs" >
+             <button type="button" id="deleteButton" disabled="disabled" class="am-btn am-btn-default" onclick="addPacket('<%if(isAdd){%>${base}/shelf/addPacket<%}else{%>${base}/shelf/deletePacket<%}%>')"><span class="am-icon-trash-o"></span> 确认</button>
+         </div>
+       </div>
+     </div>
+     <!-- div class="am-u-sm-12 am-u-md-3">
+       <div class="am-form-group">
+         <select name="property" data-am-selected="{btnSize: 'sm'}">
+           <option value="name" <%if(property! == "name"){%>selected="selected"<%}%>>名称</option>
+         </select>
+       </div>
+     </div>
+     <div class="am-u-sm-12 am-u-md-3" >
+       <div class="am-input-group am-input-group-sm">
+         <input type="text" class="am-form-field" name="keyword" value="">
+         <span class="am-input-group-btn">
+           <button id="searchButton" class="am-btn am-btn-default" type="button">搜索</button>
+         </span>
+       </div>
+     </div>
+   </div -->
+   <div class="am-g" >
+     <div class="am-u-sm-12" style="padding:0px 5px 0px 0px;margin:0px;"><!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+         <table class="am-table am-table-striped am-table-hover table-main" style="padding:0px;margin:0px;">
+           <thead>
+
+             <tr>
+                 <th></th>
+               <th class="table-check"><input type="checkbox" id="allCheck"></th>
+               <th class="table-id">序号</th>
+               <th class="table-title">商品包名称</th>
+               <th>图片</th>
+               <th>最大数量</th>
+               <th>折扣百分比</th>
+               <th>折扣金额</th>
+               <th class="table-date ">修改日期</th>
+               <th class="table-set">操作</th>
+             </tr>
+         </thead>
+         <tbody>
+         <%for(list in pager.list){%>
+         	 <tr>
+                 <td></td>
+             <td><input type="checkbox" name="ids" value="${list.id}"></td>              
+             <td>${listLP.index}</td>              
+             <td>${list.name}</td>
+             <td><%if (list.img != null){%><a href="${base}${list.img}" class="imagePreview" target="_blank">查看</a><%}else{%>暂无<%}%></td>
+             <td>${list.maxBuy}</td>
+             <td>${list.disPercent}</td>
+             <td>${list.disAmount}</td>
+             <td>${list.modifyDate,dateFormat="yyyy-MM-dd HH:mm:ss"}</td>
+           </tr>
+         <%}%> 
+       </tbody>
+       </table>
+         <div class="am-cf">
+  			<!-- 分页 -->
+  			<%if (pager.list.~size > 0){%>
+  				<div class="am-fr">
+  					<% include("/admin/pager.html"){}%>
+  				</div>
+  			<%}else{%>
+   			<div class="am-kai">
+			  <h3>没有找到任何记录!</h3>
+			</div>
+  			<%}%>
+	 </div>  
+     </div>
+   </div>
+  </form>
+</div>
+
+</body>
+<%}%>

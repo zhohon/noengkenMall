@@ -1,0 +1,118 @@
+<%layout("/admin/common/default.html",{'title' : '添加活动'}){%>
+<!-- We support more than 40 localizations -->
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/grid.locale-en.min.js"></script>
+<!-- This is the Javascript file of jqGrid -->
+<script type="text/javascript" src="${base}/js/plugin/jqgrid/jquery.jqGrid.min.js"></script>
+<!-- A link to a Boostrap  and jqGrid Bootstrap CSS siles-->
+<link rel="stylesheet" href="${base}/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="${base}/css/jqgrid/ui.jqgrid-bootstrap.css" />
+<script>
+        $.jgrid.defaults.width = 800;
+        $.jgrid.defaults.responsive = true;
+        $.jgrid.defaults.styleUI = 'Bootstrap';
+</script>
+<body class="">
+<div id="ribbon">
+    <!-- breadcrumb -->
+    <ol class="breadcrumb">
+        <li>商品管理</li>
+        <li>商品列表</li>
+    </ol>
+    <!-- end breadcrumb -->
+</div>
+<!-- END RIBBON -->
+<!-- MAIN CONTENT -->
+<div id="content" style="padding:2px;">
+    <!-- widget grid -->
+    <section id="widget-grid" class="">
+        <!-- row -->
+        <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                <table id="jqgrid"></table>
+                <div id="pjqgrid"></div>
+                <br>
+                <button type="button" class="am-btn am-btn-default" onclick="location.href='${base}/product/add'"><span
+                        class="am-icon-plus"></span> 新增
+                </button>
+                <button type="button" class="am-btn am-btn-default" onclick="editPorduct('${base}/product/edit')"><span
+                        class="am-icon-trash-o"></span>修改
+                </button>
+            </article>
+            <!-- WIDGET END -->
+
+        </div>
+        <!-- end row -->
+
+    </section>
+    <!-- end widget grid -->
+
+</div>
+<!-- END MAIN CONTENT -->
+
+</body>
+
+<script type="text/javascript">
+    function editPorduct(url) {
+        var grid = $("#jqgrid");
+        var rowKey = grid.getGridParam("selrow");
+        var selectedIDs = grid.getGridParam("selarrrow");
+        if (!rowKey) {
+            alert("No rows are selected");
+        }
+        else if (selectedIDs.length > 1) {
+            alert("Too many rows");
+        }
+        else {
+            window.location.href = url + "?id=" + selectedIDs[0];
+        }
+    }
+    $(document).ready(function () {
+        jQuery("#jqgrid").jqGrid({
+            url: '${base}/product/getProduct',
+            editurl: '${base}/product/forEdit',
+            datatype: "json",
+            mtype: "POST",
+            //data : jqgrid_data,
+            //datatype : "local",
+            height: 'auto',
+            colNames: ['${c2("product.productSn")}', '${c2("product.name")}', '${c2("product.price")}', '${c2("product.isMarketable")}', '${c2("product.isBest")}', '${c2("product.isNew")}', '${c2("product.isHot")}', '${c2("product.store")}', '${c2("product.modifyDate")}'],
+            colModel: [
+                {name: 'productSn', index: 'productSn', editable: true, width: 120},
+                {name: 'name', index: 'name', editable: true, width: 400},
+                {name: 'price', index: 'price', editable: true, align: "right", width: 50},
+                {name: 'isMarketable', index: 'isMarketable', editable: true, width: 50},
+                {name: 'isBest', index: 'isBest', editable: true, width: 50},
+                {name: 'isNew', index: 'isNew', editable: true, width: 50},
+                {name: 'isHot', index: 'isHot', editable: true, width: 50},
+                {name: 'store', index: 'store', editable: true, width: 50},
+                {name: 'modifyDate', index: 'modifyDate', editable: true, width: 100}
+            ],
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: '#pjqgrid',
+            sortname: 'name',
+            toolbarfilter: true,
+            viewrecords: true,
+            sortorder: "asc",
+            caption: "产品列表",
+            multiselect: true,
+            autowidth: true,
+            gridComplete: $.admin.resizeFrame
+            //toolbar : [ true, "top" ]
+        });
+
+        jQuery("#jqgrid").jqGrid('navGrid', "#pjqgrid", {
+            edit: false,
+            add: false,
+            view: false,
+            del: true
+        });
+
+    })
+    $(window).on('resize.jqGrid', function () {
+        $("#jqgrid").jqGrid('setGridWidth', $("#content").width());
+    })
+</script>
+<%}%>

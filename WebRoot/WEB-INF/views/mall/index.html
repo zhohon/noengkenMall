@@ -1,0 +1,64 @@
+<%layout("/mall/common/default.html",{'title' : '微商城'}){%>
+<div class="page-group">
+    <div id="page-index" class="page page-current">
+        <%include("/mall/common/head.html"){}%>
+        <%include("/mall/common/navigator.html"){}%>
+        <div class="content">
+            <div id="fixed-buttons" class="buttons-tab">
+                <a href="#tabHot" class="tab-link button active">热销商品</a>
+                <a href="#tabShelf" class="tab-link button">推荐货架</a>
+                <a href="#tabActivity" class="tab-link button">推荐活动</a>
+            </div>
+            <div class="tabs">
+                <div id="tabHot" class="tab active">
+                    <div class="infinite-scroll native-scroll" data-distance="100">
+                        <div class="list-block">
+                            <ul class="list-container">
+                            </ul>
+                        </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tabShelf" class="tab">
+                    <div class="infinite-scroll native-scroll" data-distance="100">
+                        <div class="list-block">
+                            <ul class="list-container">
+                            </ul>
+                        </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--活动-->
+                <div id="tabActivity" class="tab">
+                    <div class="infinite-scroll native-scroll" data-distance="100">
+                        <div class="list-block">
+                            <ul class="list-container">
+                            </ul>
+                        </div>
+                        <!-- 加载提示符 -->
+                        <div class="infinite-scroll-preloader">
+                            <div class="preloader">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%include("/mall/page-search.html"){}%>
+    <%include("/mall/page-star.html"){}%>
+    <%include("/mall/page-setting.html"){}%>
+    <%include("/mall/common/profile.html"){}%>
+</div>
+<!--手机端script需要加载后方-->
+<%include("/mall/common/script.html"){}%>
+<script type="text/javascript" src="${ctxPath}/js/sui/index.js"></script>
+<%}%>

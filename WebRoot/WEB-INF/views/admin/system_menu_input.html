@@ -1,0 +1,89 @@
+<%layout("/admin/common/default.html",{'title' : '添加菜单'}){%>
+<script type="text/javascript">
+    <%
+    var isAdd = false;
+    var isEdit = false;
+
+    if(isEmpty(menu.id)){
+    isAdd = true;
+    }else{
+    isEdit = true;
+    }%>
+
+</script>
+<body>
+<!--在这里编写你的代码-->
+<!-- content start -->
+<div class="admin-content">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">菜单管理</strong> /
+            <small><%if(isAdd){%>添加菜单<%}else{%>编辑菜单<%}%></small>
+        </div>
+    </div>
+    <hr style="padding:0px 1.6rem 1.6rem 1rem;margin:0px;">
+    <div class="am-g">
+        <div class="am-u-sm-12" style="padding:0px 5px 0px 0px;margin:0px; height: 600px;">
+            <form id="inputForm" class="am-form"
+                  action="<%if (isAdd){%>${base}/systemMenu/save<%}else{%>${base}/systemMenu/update<%}%>" method="post">
+                <input type="hidden" name="menu.id" value="${menu.id!}"/>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">菜单名称</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="menu.name" class="am-input-sm" value="${menu.name!}" required/>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning">${nameMessages!}</div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">上级分类</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <select name="menu.parent_id" data-am-selected="{btnSize: 'sm', btnStyle: 'secondary'}">
+                            <option value="0">
+                                顶级菜单
+                            </option>
+                            <%for(list in menuTreeList){%>
+                            <option value="${list.id}"
+                            <%if(isEdit&&list.id==menu.parent_id){%> selected <%}%>>
+                            ${list.name}
+                            </option>
+                            <%}%>
+                        </select>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning">&nbsp;</div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">排序</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="menu.orderList" class="am-input-sm" value="${menu.orderList!10}"
+                               title="只允许输入零或正整数" required/>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning">${orderListMessages!}</div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">路径</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <textarea name="menu.url" rows="7">${menu.url!}</textarea>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning">&nbsp;</div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-12 am-u-md-1 am-text-right admin-form-text"></div>
+                    <div class="am-u-sm-12 am-u-md-11">
+                        <button type="submit" class="am-btn am-btn-primary am-btn-sm">提交保存</button>
+                        <button type="button" class="am-btn am-btn-warning am-btn-sm"
+                                onclick="window.history.back(); return false;">放弃保存
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- content end -->
+
+</body>
+<%}%>

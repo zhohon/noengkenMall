@@ -1,0 +1,142 @@
+<%layout("/admin/common/default.html",{'title' : '商品包管理'}){%>
+
+<%
+var isAdd = false;
+var isEdit = false;
+if(isEmpty(packet.id)){
+isAdd = true;
+}else{
+isEdit = true;
+}
+%>
+
+<body>
+<!--在这里编写你的代码-->
+<div class="admin-content">
+    <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品包管理</strong> /
+            <small><%if(isAdd){%>添加商品包<%}else{%>编辑商品包<%}%></small>
+        </div>
+    </div>
+    <hr style="padding:0px 1.6rem 1.6rem 1rem;margin:0px;">
+    <div class="am-g">
+        <div class="am-u-sm-12" style="padding:0px 5px 0px 0px;margin:0px;">
+            <form id="inputForm" class="am-form"
+                  action="<%if (isAdd){%>${base}/packet/save<%}else{%>${base}/packet/update<%}%>"
+                  enctype="multipart/form-data" method="post" onsubmit="return toValid()">
+                <input type="hidden" name="packet.id" value="${packet.id!}"/>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.name")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="packet.name" class="am-input-sm" value="${packet.name!}" required/>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning">${nameMessages!}</div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.shelf_id")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                        <select  name="packet.shelf_id" class="{required: true}">
+                            <option value="">请选择...</option>
+                            <%for(list in shelfList){%>
+                            <option value="${list.id}"<%if (list.id == packet.shelf_id!){%> selected<%}%>>
+                            ${list.name}
+                            </option>
+                            <%}%>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.img")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="file" name="img" <%if (isAdd){%>required<%}%>/><%if (isEdit){%>
+                        <a href="${imgPath!}${packet.img}" class="am-input-sm" target="_blank">查看</a><%}%>
+                    </div>
+                    <div class="am-hide-sm-only am-u-md-6 am-text-warning"></div>
+                </div>
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.productCategory_id")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                <select name="packet.productCategory_id" class="{required: true}">
+                    <option value="">请选择...</option>
+                    <%for(list in productCategoryTreeList){%>
+                    <option value="${list.id}"<%if (list.id == packet.productCategory_id!){%> selected<%}%>>
+                    <%if (list.level != 0){%>
+                    <%for( i in range(0,list.level)){%>------<%}%>
+                    <%}%>
+                    ${list.name}
+                    </option>
+                    <%}%>
+                </select>
+                    </div>
+                <label class="requireField">*</label>
+                </div>
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.maxBuy")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="packet.maxBuy"  value="${packet.maxBuy!}" title="只允许输入零或正整数" />
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-6 am-text-warning"></div>
+                </div>
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.disPercent")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="packet.disPercent" class="am-input-sm" value="${packet.disPercent!'0'}" title="只允许输入零或正整数" />
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-6 am-text-warning"></div>
+                </div>
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.disAmount")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="packet.disAmount" class="am-input-sm" value="${packet.disAmount!'0'}" title="只允许输入零或正整数" />
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-6 am-text-warning"></div>
+                </div>
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-4 am-u-md-1 am-text-right">${c2("packet.seq")}:</div>
+                    <div class="am-u-sm-8 am-u-md-4">
+                        <input type="text" name="packet.seq" class="am-input-sm" value="${packet.seq!}" title="只允许输入零或正整数" />
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-6 am-text-warning"></div>
+                </div>
+
+                <div class="am-g am-margin-top-sm">
+                    <div class="am-u-sm-12 am-u-md-1 am-text-right admin-form-text">${c2("packet.imageText")}:</div>
+                    <div class="am-u-sm-12 am-u-md-11">
+                        <script id="editor" name="packet.imageText" type="text/plain"  style="width:350px;height:240px;">${packet.imageText!}</script>
+                    </div>
+                </div>
+
+                <div class="am-g am-margin-top">
+                    <div class="am-u-sm-12 am-u-md-1 am-text-right admin-form-text"></div>
+                    <div class="am-u-sm-12 am-u-md-11">
+                        <button type="submit" class="am-btn am-btn-primary am-btn-xs">提交保存</button>
+                        <button type="button" class="am-btn am-btn-warning am-btn-xs"
+                                onclick="window.history.back(); return false;">放弃保存
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 百度编辑器 -->
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="${base}/template/common/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    var ue = UE.getEditor('editor');//初始化
+    function toValid(){
+        if(!UE.getEditor('editor').hasContents())
+        {
+            alert("请输入图文内容");
+            return false;
+        }
+    }
+</script>
+
+<!-- content end -->
+</body>
+<%}%>

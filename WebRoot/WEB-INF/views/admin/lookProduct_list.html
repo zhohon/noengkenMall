@@ -1,0 +1,69 @@
+<%layout("/admin/common/default.html",{'title' : '查看商品'}){%>
+    <script type="text/javascript" src="${base}/template/admin/js/list.js"></script>
+
+<body>
+<!--在这里编写你的代码-->
+<div class="admin-content">
+  <div class="am-cf am-padding" style="padding:1rem 1.6rem 1.6rem 1rem;margin:0px;"> <!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品管理</strong> / <small>商品列表</small></div>
+  </div>
+  <form class="am-form" id="listForm" action="${base}/shelf/list" method="post">
+     <!--div class="am-u-sm-12 am-u-md-3" >
+       <div class="am-input-group am-input-group-sm">
+         <input type="text" class="am-form-field" name="keyword" value="">
+         <span class="am-input-group-btn">
+           <button id="searchButton" class="am-btn am-btn-default" type="button">搜索</button>
+         </span>
+       </div>
+     </div>
+   </div-->
+   <div class="am-g" >
+     <div class="am-u-sm-12" style="padding:0px 5px 0px 0px;margin:0px;"><!--  padding:1px 2px 3px 4px;上、右、下,和左   -->
+         <table class="am-table am-table-striped am-table-hover table-main" style="padding:0px;margin:0px;">
+           <thead>
+             <tr>
+               <th class="table-check"><input type="checkbox" id="allCheck"></th>
+               <th class="table-id">序号</th>
+               <th class="table-title">商品名称</th>
+               <!--th class="table-type">类型</th>
+                 <th class="table-type">活动</th>
+               <th>图片</th>
+               <th>最大数量</th-->
+               <th class="table-date ">修改日期</th>
+               <th class="table-set">操作</th>
+             </tr>
+         </thead>
+         <tbody>
+         <%for(list in pager.list){%>
+         	 <tr>
+             <td><input type="checkbox" name="ids" value="${list.id}"></td>              
+             <td>${listLP.index}</td>              
+             <td>${list.name}</td>
+             <td>${list.modifyDate,dateFormat="yyyy-MM-dd HH:mm:ss"}</td>
+             <td>
+               <div class="am-btn-toolbar">
+               </div>
+             </td>
+           </tr>
+         <%}%> 
+       </tbody>
+       </table>
+         <div class="am-cf">
+  			<!-- 分页 -->
+  			<%if (pager.list.~size > 0){%>
+  				<div class="am-fr">
+  					<% include("/admin/pager.html"){}%>
+  				</div>
+  			<%}else{%>
+   			<div class="am-kai">
+			  <h3>没有找到任何记录!</h3>
+			</div>
+  			<%}%>
+	 </div>  
+     </div>
+   </div>
+  </form>
+</div>
+
+</body>
+<%}%>

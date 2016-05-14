@@ -1,0 +1,68 @@
+<%layout("/mall/common/default.html",{'title' : '微商城'}){%>
+<div class="page-group">
+    <div id="page-packet-main" class="page page-current">
+        <%include("/mall/packet/head.html",{'title' : '商品详情'}){}%>
+        <%include("/mall/common/detail-navigator.html",{'direct':true}){}%>
+        <div class="content infinite-scroll infinite-scroll-bottom" data-distance="100">
+            <div class="card facebook-card">
+                <div class="card-header no-border">
+                    <div class="facebook-name"><h3>${packet.name!}</h3></div>
+                </div>
+                <div class="card-content"><!-- Slider -->
+                    <div class="swiper-container" data-space-between='10'>
+                        <div class="swiper-wrapper">
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div class="card-footer no-border">
+                    <a href="#" class="link"><p>${packet.price!,numberFormat="￥##.##元"}</p></a>
+                    <a href="#" class="link">评论</a>
+                    <a href="#" class="link">分享</a>
+                </div>
+            </div>
+
+            <div class="buttons-tab fixed-tab" data-offset="44">
+                <a href="#tabProductDetail" class="tab-link active button">图文详情</a>
+                <a href="#tabProductParam" class="tab-link button">参数明细</a>
+                <a href="#tabStoreRecommend" class="tab-link button">评论</a>
+            </div>
+
+            <div class="tabs">
+                <div id="tabProductDetail" class="tab active">
+                    <div class="content-block">
+                        <div class="content-block">
+                            <div id="imageText" class="content-block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tabProductParam" class="tab infinite-scroll">
+                    <div class="content-block">
+                    </div>
+                    <!-- 加载提示符 -->
+                    <div class="infinite-scroll-preloader">
+                        <div class="preloader">
+                        </div>
+                    </div>
+                </div>
+                <div id="tabStoreRecommend" class="tab infinite-scroll">
+                    <div class="content-block">
+                    </div>
+                    <!-- 加载提示符 -->
+                    <div class="infinite-scroll-preloader">
+                        <div class="preloader">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <%include("/mall/common/profile.html"){}%>
+    <!--手机端script需要加载后方-->
+    <%include("/mall/common/script.html"){}%>
+    <script type="text/javascript" src="${ctxPath}/js/sui/packet.js"></script>
+</div>
+<%}%>
